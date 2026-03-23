@@ -48,8 +48,8 @@ export default function Players() {
         .eq('academy_id', profile.academy_id!)
         .order('updated_at', { ascending: false });
 
-      if (filterLevel !== 'all') query = query.eq('level', filterLevel);
-      if (filterStatus !== 'all') query = query.eq('status', filterStatus);
+      if (filterLevel !== 'all') query = query.eq('level', filterLevel as any);
+      if (filterStatus !== 'all') query = query.eq('status', filterStatus as any);
       if (filterCoach !== 'all') query = query.eq('head_coach_id', filterCoach);
 
       const { data } = await query;
