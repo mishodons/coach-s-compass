@@ -3,16 +3,15 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { LevelBadge, PlayerStatusBadge, StatusBadge } from '@/components/StatusBadge';
+import { LevelBadge, PlayerStatusBadge } from '@/components/StatusBadge';
 import { ArrowLeft } from 'lucide-react';
 import { format, differenceInYears } from 'date-fns';
-import { OverviewTab } from '@/components/player/OverviewTab';
-import { TrainingPlanTab } from '@/components/player/TrainingPlanTab';
-import { SessionsTab } from '@/components/player/SessionsTab';
-import { ScheduleTab } from '@/components/player/ScheduleTab';
-import { TournamentsTab } from '@/components/player/TournamentsTab';
+import { StatisticsCard } from '@/components/player/StatisticsCard';
+import { RankingProgressionCard } from '@/components/player/RankingProgressionCard';
+import { RecentActivityCard } from '@/components/player/RecentActivityCard';
+import { TrainingPlanCard } from '@/components/player/TrainingPlanCard';
+import { WeeklyScheduleCard } from '@/components/player/WeeklyScheduleCard';
+import { SkillSessionsCard } from '@/components/player/SkillSessionsCard';
 import { LogSessionDialog } from '@/components/player/LogSessionDialog';
 
 export default function PlayerDetail() {
@@ -20,7 +19,6 @@ export default function PlayerDetail() {
   const navigate = useNavigate();
   const { profile } = useAuth();
   const [player, setPlayer] = useState<any>(null);
-  const [coaches, setCoaches] = useState<any[]>([]);
   const [assistantCoaches, setAssistantCoaches] = useState<any[]>([]);
   const [logSessionOpen, setLogSessionOpen] = useState(false);
 
@@ -40,9 +38,7 @@ export default function PlayerDetail() {
     setAssistantCoaches(ac || []);
   };
 
-  useEffect(() => {
-    fetchPlayer();
-  }, [id]);
+  useEffect(() => { fetchPlayer(); }, [id]);
 
   const toggleStatus = async () => {
     if (!player) return;
@@ -64,8 +60,8 @@ export default function PlayerDetail() {
     : null;
 
   return (
-    <div className="max-w-5xl mx-auto space-y-6">
-      {/* Header */}
+    <div className="max-w-7xl mx-auto space-y-6">
+      {/* Header — full width */}
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-3">
           <Button variant="ghost" size="icon" onClick={() => navigate('/players')}>
@@ -99,32 +95,22 @@ export default function PlayerDetail() {
         </div>
       </div>
 
-      {/* Tabs */}
-      <Tabs defaultValue="overview">
-        <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="training">Training Plan</TabsTrigger>
-          <TabsTrigger value="sessions">Sessions</TabsTrigger>
-          <TabsTrigger value="schedule">Schedule</TabsTrigger>
-          <TabsTrigger value="tournaments">Tournaments</TabsTrigger>
-        </TabsList>
+      {/* Two-column dashboard layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-6">
+        {/* Left/Center column */}
+        <div className="space-y-6">
+          <StatisticsCard playerId={player.id} />
+          <RankingProgressionCard playerId={player.id} />
+          <RecentActivityCard playerId={player.id} />
+          <TrainingPlanCard playerId={player.id} />
+        </div>
 
-        <TabsContent value="overview" className="mt-4">
-          <OverviewTab player={player} onUpdate={fetchPlayer} />
-        </TabsContent>
-        <TabsContent value="training" className="mt-4">
-          <TrainingPlanTab playerId={player.id} />
-        </TabsContent>
-        <TabsContent value="sessions" className="mt-4">
-          <SessionsTab playerId={player.id} onLogSession={() => setLogSessionOpen(true)} />
-        </TabsContent>
-        <TabsContent value="schedule" className="mt-4">
-          <ScheduleTab playerId={player.id} />
-        </TabsContent>
-        <TabsContent value="tournaments" className="mt-4">
-          <TournamentsTab playerId={player.id} />
-        </TabsContent>
-      </Tabs>
+        {/* Right column */}
+        <div className="space-y-6">
+          <WeeklyScheduleCard playerId={player.id} />
+          <SkillSessionsCard playerId={player.id} />
+        </div>
+      </div>
 
       <LogSessionDialog
         open={logSessionOpen}

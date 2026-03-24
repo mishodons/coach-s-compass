@@ -68,6 +68,151 @@ export type Database = {
           },
         ]
       }
+      player_matches: {
+        Row: {
+          created_at: string
+          id: string
+          match_date: string | null
+          opponent_name: string | null
+          player_id: string
+          result: string | null
+          round: string | null
+          score: string | null
+          tournament_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          match_date?: string | null
+          opponent_name?: string | null
+          player_id: string
+          result?: string | null
+          round?: string | null
+          score?: string | null
+          tournament_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          match_date?: string | null
+          opponent_name?: string | null
+          player_id?: string
+          result?: string | null
+          round?: string | null
+          score?: string | null
+          tournament_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "player_matches_player_id_fkey"
+            columns: ["player_id"]
+            isOneToOne: false
+            referencedRelation: "players"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "player_matches_tournament_id_fkey"
+            columns: ["tournament_id"]
+            isOneToOne: false
+            referencedRelation: "player_tournaments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      player_ota_profiles: {
+        Row: {
+          career_losses: number | null
+          career_total: number | null
+          career_wins: number | null
+          created_at: string
+          id: string
+          ota_guid: string | null
+          ota_id: string | null
+          player_id: string
+          scraped_at: string | null
+          updated_at: string
+          wtn_singles: number | null
+          year_losses: number | null
+          year_wins: number | null
+        }
+        Insert: {
+          career_losses?: number | null
+          career_total?: number | null
+          career_wins?: number | null
+          created_at?: string
+          id?: string
+          ota_guid?: string | null
+          ota_id?: string | null
+          player_id: string
+          scraped_at?: string | null
+          updated_at?: string
+          wtn_singles?: number | null
+          year_losses?: number | null
+          year_wins?: number | null
+        }
+        Update: {
+          career_losses?: number | null
+          career_total?: number | null
+          career_wins?: number | null
+          created_at?: string
+          id?: string
+          ota_guid?: string | null
+          ota_id?: string | null
+          player_id?: string
+          scraped_at?: string | null
+          updated_at?: string
+          wtn_singles?: number | null
+          year_losses?: number | null
+          year_wins?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "player_ota_profiles_player_id_fkey"
+            columns: ["player_id"]
+            isOneToOne: true
+            referencedRelation: "players"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      player_ranking_history: {
+        Row: {
+          created_at: string
+          id: string
+          player_id: string
+          points: number | null
+          ranking: number | null
+          recorded_date: string
+          source: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          player_id: string
+          points?: number | null
+          ranking?: number | null
+          recorded_date: string
+          source?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          player_id?: string
+          points?: number | null
+          ranking?: number | null
+          recorded_date?: string
+          source?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "player_ranking_history_player_id_fkey"
+            columns: ["player_id"]
+            isOneToOne: false
+            referencedRelation: "players"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       player_skill_items: {
         Row: {
           coach_note: string | null
@@ -121,6 +266,59 @@ export type Database = {
             columns: ["skill_item_id"]
             isOneToOne: false
             referencedRelation: "skill_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      player_tournaments: {
+        Row: {
+          category: string | null
+          created_at: string
+          draw: string | null
+          end_date: string | null
+          id: string
+          is_upcoming: boolean | null
+          level: string | null
+          location: string | null
+          player_id: string
+          result_summary: string | null
+          start_date: string | null
+          tournament_name: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          draw?: string | null
+          end_date?: string | null
+          id?: string
+          is_upcoming?: boolean | null
+          level?: string | null
+          location?: string | null
+          player_id: string
+          result_summary?: string | null
+          start_date?: string | null
+          tournament_name: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          draw?: string | null
+          end_date?: string | null
+          id?: string
+          is_upcoming?: boolean | null
+          level?: string | null
+          location?: string | null
+          player_id?: string
+          result_summary?: string | null
+          start_date?: string | null
+          tournament_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "player_tournaments_player_id_fkey"
+            columns: ["player_id"]
+            isOneToOne: false
+            referencedRelation: "players"
             referencedColumns: ["id"]
           },
         ]
